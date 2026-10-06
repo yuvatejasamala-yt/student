@@ -24,4 +24,34 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            emailext(
+                subject: "Jenkins SUCCESS - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Jenkins Build Successful</h2>
+                    <p><b>Job:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> SUCCESS</p>
+                    <p>The Maven build and tests completed successfully.</p>
+                """,
+                to: "yuvatejasamala@gmail.com"
+            )
+        }
+
+        failure {
+            emailext(
+                subject: "Jenkins FAILED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    <h2>Jenkins Build Failed</h2>
+                    <p><b>Job:</b> ${env.JOB_NAME}</p>
+                    <p><b>Build Number:</b> ${env.BUILD_NUMBER}</p>
+                    <p><b>Status:</b> FAILURE</p>
+                    <p>Please check the Jenkins console output.</p>
+                """,
+                to: "yuvatejasamala@gmail.com"
+            )
+        }
+    }
 }
